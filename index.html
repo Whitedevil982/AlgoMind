@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DSA AI - Problem Solver & Question Assistant</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+</head>
+<body>
+    <div class="app">
+        <!-- Background decorations -->
+        <div class="bg-decoration">
+            <div class="floating-shape shape-1"></div>
+            <div class="floating-shape shape-2"></div>
+            <div class="floating-shape shape-3"></div>
+        </div>
+
+        <!-- Header -->
+        <header class="header">
+            <div class="container">
+                <div class="header-content">
+                    <div class="logo">
+                        <i data-lucide="brain-circuit"></i>
+                        <span>DSA AI</span>
+                    </div>
+                    <nav class="nav-tabs">
+                        <button class="nav-tab active" data-tab="dsa">
+                            <i data-lucide="code"></i>
+                            DSA Problem Solver
+                        </button>
+                        <button class="nav-tab" data-tab="question">
+                            <i data-lucide="message-circle"></i>
+                            Question AI Assistant
+                        </button>
+                    </nav>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main">
+            <div class="container">
+                <!-- DSA Problem Solver Tab -->
+                <section id="dsa-tab" class="tab-content active">
+                    <div class="section-header">
+                        <h1>DSA Problem Solver</h1>
+                        <p>Get AI-powered solutions with detailed explanations for your data structures and algorithms problems</p>
+                    </div>
+
+                    <div class="dsa-container">
+                        <div class="input-section">
+                            <div class="form-group">
+                                <label class="form-label">Programming Language</label>
+                                <select class="form-control language-select" id="language-select">
+                                    <option value="">Select Language</option>
+                                    <option value="python">Python</option>
+                                    <option value="java">Java</option>
+                                    <option value="cpp">C++</option>
+                                    <option value="javascript">JavaScript</option>
+                                    <option value="kotlin">Kotlin</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Problem Statement</label>
+                                <div class="textarea-container">
+                                    <textarea 
+                                        class="form-control problem-input" 
+                                        id="problem-input"
+                                        rows="8"
+                                        placeholder="Paste your DSA problem here...
+
+Example: Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target. You may assume that each input would have exactly one solution, and you may not use the same element twice."
+                                    ></textarea>
+                                    <button class="btn btn--primary generate-btn-inline" id="generate-solution" disabled>
+                                        <i data-lucide="sparkles"></i>
+                                        <span class="btn-text">Generate Solution</span>
+                                        <div class="btn-loader hidden">
+                                            <div class="spinner"></div>
+                                        </div>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mode-selection">
+                            <h3>Choose Explanation Mode</h3>
+                            <div class="mode-cards">
+                                <div class="mode-card" data-mode="brief">
+                                    <div class="mode-icon">
+                                        <i data-lucide="code"></i>
+                                    </div>
+                                    <h4>Code + Brief Explain</h4>
+                                    <p>Get concise code solutions with short explanations</p>
+                                </div>
+                                <div class="mode-card" data-mode="depth">
+                                    <div class="mode-icon">
+                                        <i data-lucide="book-open"></i>
+                                    </div>
+                                    <h4>Code + Depth Explain</h4>
+                                    <p>Detailed code solutions with comprehensive explanations</p>
+                                </div>
+                                <div class="mode-card" data-mode="pro">
+                                    <div class="mode-icon">
+                                        <i data-lucide="zap"></i>
+                                    </div>
+                                    <h4>Pro Mode</h4>
+                                    <p>Step-by-step analysis: brute force → optimized solution in simple terms</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="solution-output hidden" id="solution-output">
+                            <div class="card">
+                                <div class="card__header">
+                                    <h3>AI Generated Solution</h3>
+                                    <button class="btn btn--outline btn--sm copy-btn" id="copy-solution">
+                                        <i data-lucide="copy"></i>
+                                        Copy
+                                    </button>
+                                </div>
+                                <div class="card__body">
+                                    <div class="solution-content" id="solution-content"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Question AI Assistant Tab -->
+                <section id="question-tab" class="tab-content">
+                    <div class="section-header">
+                        <h1>Question AI Assistant</h1>
+                        <p>Get instant answers to your programming questions with PDF analysis capabilities</p>
+                    </div>
+
+                    <div class="question-container">
+                        <div class="question-layout">
+                            <!-- Chat Interface -->
+                            <div class="chat-section">
+                                <div class="chat-header">
+                                    <div class="chat-title">
+                                        <i data-lucide="message-circle"></i>
+                                        <h3>AI Assistant Chat</h3>
+                                    </div>
+                                    <div class="mode-toggle">
+                                        <button class="toggle-btn active" data-mode="general">General</button>
+                                        <button class="toggle-btn" data-mode="pdf">PDF Chat</button>
+                                    </div>
+                                </div>
+                                
+                                <div class="chat-container">
+                                    <div class="chat-messages" id="chat-messages">
+                                        <div class="welcome-message">
+                                            <i data-lucide="bot"></i>
+                                            <div>
+                                                <h4>Hi! I'm your AI assistant</h4>
+                                                <p>Ask me anything about programming, data structures, algorithms, or upload a PDF for document-specific questions.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="quick-questions">
+                                        <div class="quick-question-item" data-question="What is the difference between ArrayList and LinkedList in Java?">
+                                            <i data-lucide="database"></i>
+                                            ArrayList vs LinkedList
+                                        </div>
+                                        <div class="quick-question-item" data-question="Explain how binary search works with an example">
+                                            <i data-lucide="search"></i>
+                                            Binary Search
+                                        </div>
+                                        <div class="quick-question-item" data-question="What are the time complexities of common sorting algorithms?">
+                                            <i data-lucide="trending-up"></i>
+                                            Sorting Complexities
+                                        </div>
+                                        <div class="quick-question-item" data-question="How do you implement a hash table from scratch?">
+                                            <i data-lucide="hash"></i>
+                                            Hash Tables
+                                        </div>
+                                    </div>
+                                    <div class="chat-input-container">
+                                        <div class="chat-input-wrapper">
+                                            <input 
+                                                type="text" 
+                                                class="form-control chat-input" 
+                                                id="chat-input"
+                                                placeholder="Ask me anything about programming..."
+                                            >
+                                            <button class="btn btn--primary send-btn" id="send-message">
+                                                <i data-lucide="send"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Toggle Panels -->
+                            <div class="toggle-panels">
+                                <div class="panel-toggles">
+                                    <button class="panel-toggle-btn" id="pdf-panel-toggle">
+                                        <i data-lucide="file-text"></i>
+                                        <span>Upload PDF</span>
+                                        <i data-lucide="chevron-down" class="toggle-icon"></i>
+                                    </button>
+                                    <button class="panel-toggle-btn" id="tools-panel-toggle">
+                                        <i data-lucide="tools"></i>
+                                        <span>Analysis Tools</span>
+                                        <i data-lucide="chevron-down" class="toggle-icon"></i>
+                                    </button>
+                                </div>
+
+                                <!-- PDF Panel -->
+                                <div class="toggle-panel hidden" id="pdf-panel">
+                                    <div class="panel-content">
+                                        <h4>PDF Analysis</h4>
+                                        <div class="pdf-upload-area" id="pdf-upload">
+                                            <div class="upload-placeholder">
+                                                <i data-lucide="upload"></i>
+                                                <h4>Upload PDF Documents</h4>
+                                                <p>Drag & drop files here or click to browse</p>
+                                                <input type="file" class="file-input" accept=".pdf" multiple>
+                                            </div>
+                                        </div>
+                                        <div class="uploaded-files hidden" id="uploaded-files">
+                                            <h4>Uploaded Files</h4>
+                                            <div class="file-list" id="file-list"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Tools Panel -->
+                                <div class="toggle-panel hidden" id="tools-panel">
+                                    <div class="panel-content">
+                                        <h4>Analysis Tools</h4>
+                                        <div class="analysis-tools">
+                                            <button class="tool-btn" id="generate-summary" disabled>
+                                                <i data-lucide="file-text"></i>
+                                                <div>
+                                                    <h5>Generate Summary</h5>
+                                                    <p>Create summary from uploaded PDFs</p>
+                                                </div>
+                                            </button>
+                                            <button class="tool-btn" id="generate-quiz" disabled>
+                                                <i data-lucide="help-circle"></i>
+                                                <div>
+                                                    <h5>Generate Quiz</h5>
+                                                    <p>Create practice questions from content</p>
+                                                </div>
+                                            </button>
+                                            <button class="tool-btn" id="extract-concepts" disabled>
+                                                <i data-lucide="lightbulb"></i>
+                                                <div>
+                                                    <h5>Extract Key Concepts</h5>
+                                                    <p>Identify important topics and terms</p>
+                                                </div>
+                                            </button>
+                                        </div>
+                                        <div class="pro-tips">
+                                            <h5><i data-lucide="star"></i> Pro Tips</h5>
+                                            <ul>
+                                                <li>Upload multiple PDFs for comprehensive analysis</li>
+                                                <li>Use specific questions for better answers</li>
+                                                <li>Try the analysis tools after uploading documents</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <!-- Toast Notifications -->
+        <div class="toast-container" id="toast-container"></div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
